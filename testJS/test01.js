@@ -1,0 +1,1 @@
+document.write('第二种，从一个js文件中调用js	代码 <br/>');

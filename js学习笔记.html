@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> js学习笔记</title>
+	</head>
+	<body>
+<br/>--------调用js的三种方法<br/>
+		<script type="text/javascript">
+			document.write('第一种，直接写在script标签中<br/>');
+		</script>
+		<script src="testJs/test01.js" type="text/javascript"><br/></script>
+		<a href="javascript:confirm('这是一个确认框')">
+			第三种，是作为某个元素的事件属性或超链接属性<br/>
+		</a>
+
+<br/>--------代码屏蔽		<br/>
+		<script type="text/javascript">
+			<!--
+				document.write('如果浏览器不支持JS代码，则这里的代码不会被执行，\
+				如果支持，则会无视上面的<!--标签');
+			//-->
+		</script>
+		<noscript>
+			当浏览器不支持js时，会显示这里的文字：你的ie不灵，换一个
+		</noscript>
+
+<br/>-------- 常用命令		<br/>
+		document.write('向文档中写入内容');
+		console.log('向控制台写内容，用于调试代码');
+		alert('弹窗，也可用于调试');
+
+
+<br/>-------- 隐式类型转换		<br/>
+<p>
+		以下类型可以当false用：<br/>
+		undefined\null\0\NaN\"" <br/>
+</p>
+	</body>
+
+</html>
