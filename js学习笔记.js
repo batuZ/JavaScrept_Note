@@ -292,11 +292,6 @@
 
 ### 13､对象的特性，对象属性的特性
 
-	对象的特性：
-		proto 		//父对象的属性，当自身属性使用
-		class
-		extensible
-
 	属性的特性：
 
 		定义和修改这些特性的方法
@@ -376,6 +371,206 @@
 
 		//jump 是prototype,父对象的属性
 		console.log(obj.jump);
+
+
+	对象的特性：
+		//查看父对象的原型,croom subry支持，IE不支持 
+		proto 		
+			function Father (){};
+			var obj = new Father();
+			obj.__proto__ => Father(function)
+
+		//描述对象类型的字符串
+		class
+			//内置对象类型不能通过 typeof 获取其准确的类型，只能得到object
+			//需要自己写一个函数来实现
+			function classof(obj){
+				if(obj === undefined)
+					return 'undefined';
+				if(obj === null)
+					return 'null';
+				return Object.prototype.toString.call(obj).slice(8, -1);
+			}
+			var obj = new Array();
+			console.log(classof(obj));
+
+		extensible???
+
+
+### 14､数组
+	创建数组
+		// 	字面量创建
+		var arr = [];
+		arr = [1, 'aa'+'bb', 3.14, [x,y], null, undefined, {x:'X'}, false];
+		arr = [1, , 3]; -> [1,undefined,3]
+
+		//构造函数
+		var arr = new Array();
+		arr = new Array(3); length->3
+		arr = new Array(1, 'aa'+'bb', 3.14, [x,y], null, undefined, {x:'X'}, false);
+	
+	操作数组
+		var arr = [1, 'aa'+'bb', 3.14, [x,y], null, undefined, {x:'X'}, false];
+
+		//读
+			var s = arr[1];
+
+		//改
+			arr[0] = 44;
+
+		//增
+
+			//增加成员到指定位置
+			arr[60] = 'haha'; -> length=61;
+
+			//增加成员到数组未尾
+			arr.push(55.5);
+			arr.push('f','g');
+
+			//增加成员到数组开始位置
+			arr.unshift(4.2);
+			arr.unshift('h',3);
+
+
+		//删
+
+			//删掉指定的成员,删完后数组的长度是不变的，也就是索引不变，可以肆意的for delete!
+			delete arr[3];
+
+			//删掉最后一个成员,返回被删的成员
+			var lastOne = arr.pop();
+
+			//删掉第一个成员，返回这个成员
+			var fristOne = arr.shift();
+
+	关于length
+
+		//设置length的值，小于现有值数组会被截断，大于现有值成员数量无变化
+		arr = [1,2,3,4,5,6];
+		arr.length = 3; arr -> [1,2,3] 
+
+		//当length=0时会清空数组
+
+		//如果不想让数组可以修改长度可以设置一下数组的length属性的特性
+		Object.defineProperty(arr, 'length', {writable:false});
+
+
+	遍历数组
+
+		//连续数组，稠密数组
+		for (var i = 0; i < arr.length; i++) {
+			arr[i]
+		}
+
+		//不连续数组，稀疏数组
+		for (var itm in arr) {
+			itm
+		}
+		//只遍历自己的成员（属性）
+		for(var itm in arr)	{
+			if(arr.hasOwnProperty(itm)){
+				itm
+			}
+		}
+		
+		//实例方法，用来exite,find,max,min等
+		arr.forEach(function(i){if(i>99) return i;});
+
+	Array的内置方法
+
+	join
+		//用 , 把成员连在一起（默认为 ，），返回个字符串，是切分字符串的逆向操作
+		arr.join(',')
+
+	reverse
+		//返转数组内成员的顺序，返回一个新数组
+	    var newArr = arr.reverse();
+
+	sort
+	    //排顺，默认参照Unicode编码
+	    //自定义排序，接收每一个成员与下一个成员参与的表达式
+	    //获得返回值，并对返回值进行从小到大的排序
+	    //	传入两个成员，当前成员a,下个成员b
+	    //  返回值flase=0,a会向前排，true=1,a会向后排
+	    //  从小到大
+		arr.sort(function (a,b) {return a>b;});
+		//  从大到小
+		arr.sort(function (a,b) {return a<b;});
+		//  或
+		arr.sort(function (a,b) {return a-b;});
+
+	concat
+		//把指定的对象连接到当前数组的后面，返回一个新的数组
+		var newArr = arr.concat(4,'e',[4,5,6]);
+
+	slice
+		//截取当前数组中的一部份，返回一个新的数组，且原数组不变
+		var newArr = arr.slice(3);   //从下标3开始到最后
+		var newArr = arr.slice(2,4); //从下标2开始，截4个
+
+	splice
+		//取出当前数组中的一部份，返回被取出的部份
+		//同时可以选择是否要用新的成员替换到原来的位置
+		var getArr = arr.splice(2, 4); //取出从2开始的4个成员返回，原数组中的删掉
+			//取出从2开始的4个成员返回，并把参数中的对象放入被取出成员的位置上
+		var getsetArr = arr.splice(2, 4, 'a','b','c','d','e');
+
+	map
+		//对数组中每个成员执行一次指定的函数，并返回到一个新的数组中
+		var newArr = arr.map(function (a) {return a*2; });
+
+	filter | every | some
+		//用指定的规则过滤数组，并得到一个成员全部符合条件的新数组
+		//遍历数组中的每个成员，把返回true的成员放到新的数组中
+		var newArr = arr.filter(function (a) { return a>0;});
+
+		//every | some 返回值为bool
+		//every如果有任何一个成员的表达式返回了false,every返回false,全部为true时every返回true
+		//some 如果有任何一个成员的表达式返回了true,some返回true,全部为false时some返回false
+
+	reduce | reduceRight
+		//成员累加器，把传入的参数a,b操作后返回一个值ab继续与c进行操作，最后返回一个值
+		//也可以传入一个初始值
+		//reduce 从左到右 reduceRight 从右到左
+		var arr = [3,4,5,6,7];
+		
+		var val = arr.reduce(function (a,b) {return a+b;});
+		/*过程为：
+			r = 3+4;
+			r = r+5;
+			r = r+6;
+			r = r+7;
+			return r;
+			*/
+
+		var val = arr.reduce(function (a,b) {return a+b},  10);
+		/*过程
+			r = 10;
+			r = r+3;
+			r = r+4;
+			r = r+5;
+			r = r+6;
+			r = r+7;
+			return r;
+		*/
+
+	indexOf | lastIndexOf
+		//在数组中搜索指定的成员的索引，indexOf是搜索第一个出现的成员，lastIndexOf是搜索最后一个出现的成员
+		//第一个参数是要找的目标成员，第二个参数可选，指定从哪个位置开始找
+		//找到了返回索引值，找不到返回 -1
+		//	从第四个对象开始找到 'e' 的索引
+		var itm_id = arr.indexOf('e', 4)
+
+	isArray
+		//判断一个对象是否是数组
+		Array.isArray(arr); -> true
+
+	toString
+		//把数组直接转为字符串
+		arr.toString();
+
+
+
 
 
 
