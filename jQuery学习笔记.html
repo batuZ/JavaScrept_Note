@@ -5,7 +5,8 @@
 		<title> jQuery学习笔记</title>
 		<link rel="stylesheet" type="text/css" href="testCSS/test01css.css">
 	</head>
-
+	<body>
+<p><hr/>
 ### 01､调用js的三种方法<br/>
 
 	第一种，直接写在script标签中<br/>
@@ -17,8 +18,10 @@
 	第三种，是作为某个元素的事件属性或超链接属性
 	<a href="javascript:confirm('这是一个确认框')">确认</a>
 	<p onclick="javascript:alert('hello world')">click me</p>
+</p><hr/>
 
-### 02､代码屏蔽		<br/>
+<p><hr/>
+### 02､代码屏蔽		
 
 	<script type="text/javascript">
 		// <!--
@@ -29,11 +32,13 @@
 	<noscript>
 		当浏览器不支持js时，会显示这里的文字：你的ie不灵，换一个
 	</noscript>
+</p><hr/>
 
+<p><hr/>
 ### 03､jQuery 引用安装
 	参考网站： http://jquery.cuishifeng.cn/ <br/>
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<!--本地文件： <script src='testJs/jQuery.js'></script> -->
+	<!--script src="http://code.jquery.com/jquery-latest.js"></script-->
+	<script src='testJs/jQuery.js'></script>
 	
 	<script type="text/javascript">
 		//加载jquery成功后，内容放在windows.$里，简写为$
@@ -42,35 +47,310 @@
 			//筛选器及jquery函数
 			$('.a03').on('click', function () {
 				alert('03､jQuery 引用安装 click!');
+				$('.a04').hide(1000).show(1000);
 			});
-			$('.a04').hide(2000).show(2000);
 		});
 	</script>
 
+	--------------  ex  --------------<br/>
+		<button class='a03'>03､jQuery 引用安装</button><br/>
+		<div class='a04'>调函数</div>
+</p><hr/>
+
+<p><hr/>
 ### 04､jQuery 选择器<br/>
 	<script type="text/javascript">
 		$(document).ready(function () {
-			//css基本选择器
+			//基本选择器
 				$('dvi')		//通过元素选择
 				$('#tagID')		//通过ID选择
 				$('.tagClass')	//通过Class选择
 				$('*')			//全选
 				$('dvi','#tagID','.tagClass')//多选
-			//按等级选择
-				$('.cls #id')	//选中cls里的所有ID为id的目标，包括子级的子级
-				$('.cls>#id')	//选中cls里的所有ID为id的目标，只在子级中选择
-				
 
+				//ex:
+				$('.cls1').on('click',function () {
+					$('.cls2').css('backgroundColor','red');
+				});
+				$('#a01').on('click',function () {
+					$('#a02').css('backgroundColor','yellow');
+				});
+				$('button:contains("by div")').on('click',function () {
+					$('div').css('backgroundColor','green');
+
+			});
+			//按等级选择
+				$('.cls #id')	//选中cls子级中所有ID为id的目标，包括子级的子级
+				$('.cls>#id')	//选中cls子级中所有ID为id的目标，只在直接子级中选择
+				$('.cls~#id')	//选中cls同级元素中所有ID为id的目标
+				$('.cls+#id')	//选中cls同级元素中ID为id的目标，只选择后面第一个
+
+			//基本过滤器 li 是一个集合
+				$('li:first')		//选择集合的第一个（0）成员
+				$('li:last')		//选择集合的最后一个
+				$('li:not(last)')	//选择集合中不为最后一个的所有成员
+				$('li:even')		//选择集合索引为偶数的所有成员
+				$('li:odd')			//选择集合索引为奇数的所有成员
+				$('li:eq(1)')		//equire 选择索引等于1的成员
+				$('li:gt(2)')		//greeter选择索引大于2的成员
+				$('li:lt(3)')		//laster 选择索引小于3的成员
+				$(':header')		//	
+				$(':animated')		//
+
+			//内容过滤器 div 为任意元素标签
+				$('div:contains(abc)')	//选择含有内容为abc的所有div
+				$('div:has(p)')			//选择含有子元素为p的所有div
+				$('dir:empty')			//选择内容为空的所有div
+				$('div:parent')			//选择所有包含内容的div
+
+			//可见属性过滤 div 为任意元素标签
+				$('div:hidden')			//选中所有隐藏的div
+				$('visible')			//选中所有可见的div
+
+			//通过属性过滤 div 为任意元素标签
+				$('div[class="cls"]')	//选择class为cls的div
+				$('div[class^="cl"]')	//正则，选择所有class以cl开始的div	
+				$('[class$="ss"]')		//正则，选择所有class以ss结尾的div
+				$('[class*="a"]')		//正则，选择所有class包含a的div
+				$('div[xxx="vvv"]')		//选择所有自定义属性xxx为vvv的div
+				$('div[xxx!="vvv"]')	//选择所有自定义属性xxx不为vvv的div
+				//$('div[a='dd'][b='ff']')//组合过滤，选择符合条件的所有div
+
+			//子级过滤器 li 是一个list
+				$('li:first-child')		//选择第一个li,li必须是某元素的子级
+				$('li:last-child')
+				$('li:nth-child(4)')	//选择第4个li,li必须是某元素的子级
+				$('li:nth-child(3n+1)')	//选择所有索引为（3的倍数+1)的li
+				$('li:only-child')		//选择所有独生子
+
+			//：表单元素：过滤器
+				$(':input:enabled') 		//以下元素的集合(或父级)，选择所有可用的input
+				$(':text:disabled')			//文字输入框，选择所有不可用的text
+				$(':password')				//密码输入框
+				$(':radio')					//音频
+				$(':checkbox:checked')		//点选框，选择所有true的点选框	
+				$(':submit')				//提交按钮
+				$(':image:selected')		//图像，选择所有被选中的图像	
+				$(':reset')					//重置
+				$(':button')				//按钮
+				$(':file')					//文件
 		});
 	</script>
+	//forex:
+	<button class='cls1'>select by class</button>
+	<button id='a01'>select by id</button>
+	<button>select by div</button>
+	<div class='cls2'>i am class</div>
+	<div id='a02'>i am id</div>
+	<div>i am div</div>
+	<button class='cls3'>sss</button>
+	<script type="text/javascript">
+		$('.cls3').on('click',function () {
+			alert('fffffff');
+		});
+	</script>
+</p><hr/>
 
+<p><hr/>
+### 05､jQuery DOM操作(页面文档交互)<br>
 
-### --------------  ex  --------------
+	<div id='获取(设置)指定的页面内容:	tag.html();	tag.text();	tag.val()'>
+		# 获取(设置)指定的页面内容:	tag.html();	tag.text();	tag.val()<br>
+		# ()时为get,(a)时为set(a),(fun)时为传一个回调函数<br>
+		
+		ex:
+		<br><button class='cls51'>test():</button>	
+		<br><button class="cls52">html():</button>	
+		<br><input class='cls533' type="text" value="可获取入input的值">
+		<button class="cls53">val():</button>
+		<br><button class='cls54'>function</button>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('.cls51').on('click',function () {
+					$('.cls51').text($('.cls51').text()+
+						'获取目标文本内容及子级内容，<p>以编辑形式呈现<p/>');
+				});
 
-<br/>
-	<body>
-		<button class='a03'>03､jQuery 引用安装</button><br/>
-		<div class='a04'>调函数</div>
+				$('.cls52').on('click',function () {
+					$('.cls52').html($('.cls52').html()+
+						'获取目标文本内容及子级内容，<p>以最终形式呈现<p/>');
+				});
+
+				$('.cls53').on('click',function () {
+					$('.cls53').text($('.cls53').text()+$('.cls533').val());
+					$('.cls533').val('');
+				})
+
+				$('.cls54').on('click',function () {
+					//传入一个function,index为选择集的索引，item为当前索引的值
+					$('button').html(function (index, item) {
+						console.log(index + ':' + item);
+					});
+				});
+			});
+		</script>
+	</div><br><hr width="400px" color='red' align="left">
+
+	<div id='获取(设置)指定的属性:	arrt();removeArrt()'>
+		# 获取(设置)指定的属性:	arrt();removeArrt()<br>
+		# ()时为get,(a)时为set(a),(fun)时为传一个回调函数<br>
+
+		<style type="text/css">
+			#st{background-color: yellow}
+		</style>
+		<input type="text" class="hehe">
+		<button class='set05'>setArrt</button>
+		<button class='remove05'>removeArrt</button>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('.set05').on('click',function () {
+					$('.hehe').attr('id','st');
+					$('.hehe').val('setAttribute:color.yellow')
+				});
+
+				$('.remove05').on('click',function () {
+					$('.hehe').removeAttr('id');
+					$('.hehe').val('removeAttribute');
+				});
+
+				//josn形式加载多个Attribute，没有则增加，有则修改
+				$('.hehe').attr({sa:'sss','sb-1':'ddd'});
+				$('.hehe').attr('ss', function (index, oldValue) { return 'newValue'; });
+			});
+		</script>
+	</div><br><hr width="400px" color='red' align="left">
+
+	<div id='操作class属性的几种预设函数，addClass();removeClass();hasClass();toggleClass()'>
+		# 操作class属性的几种预设函数，
+		# addClass();removeClass();hasClass();toggleClass()
+		<style type="text/css">
+			.testClass{
+				color: red;
+				background-color:yellow;
+			}
+		</style><br>
+		<button>addClass</button><br>
+		<button>removeClass</button><br>
+		<button>hasClass</button><br>
+		<button>toggleClass</button><br>
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('button:contains("addClass")').on('click',function () {
+						$('button:contains("addClass")').addClass('testClass');
+				});
+				$('button:contains("removeClass")').on('click',function () {
+						$('button:contains("addClass")').removeClass('testClass');
+				});
+				$('button:contains("hasClass")').on('click',function () {
+						alert(
+							$('button:contains("addClass")').hasClass('testClass')
+							+ '/' +
+							$('button:contains("toggleClass")').hasClass('testClass')
+							);
+				});
+				$('button:contains("toggleClass")').on('click',function () {
+						$('button:contains("toggleClass")').toggleClass('testClass');
+				});
+			});
+		</script>
+	</div><br><hr width="400px" color='red' align="left">
+
+	<div id='获取（设置）CSS style: tag.css()'>
+		# '获取（设置）CSS style: tag.css()'<br>
+		# ()时为get,(a)时为set(a),(fun)时为传一个回调函数<br>
+		
+		<div class='testCSS' style="font-size: 35px;color: red;background-color: green;width: 220px">hello world!!</div>
+		<button class="testcssbtn1">tag.cssGET</button>
+		<button class="testcssbtn2">tag.cssSET</button>
+		<button class="testcssbtn3">tag.css(function)</button>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('.testcssbtn1').on('click',function () {
+					$('.testcssbtn1').text($('.testCSS').css('width'));
+				});
+
+				$('.testcssbtn2').on('click',function () {
+					$('.testCSS').css({
+						'font-size': '20px',
+						color: 'blur',
+						'background-color': 'yellow',
+						width:'120px'
+					});
+				});
+
+				$('.testcssbtn3').on('click',function () {
+					$('.testCSS').css('width',function (index,oldValue) {
+						var newValue = 300;
+						$('.testcssbtn3').text('index:' + index + '; oldValue:' + oldValue + ' toNewValue:' + newValue);
+						return newValue;
+					});
+				});
+			});
+		</script>
+	</div><hr width="400px" color='red' align="left">
+
+	<div id="向目标元素中插入子元素">
+		#向目标元素的指定位置插入子元素<br>
+
+		目标元素A：
+		<div class="tagForInsertA" style="padding-left: 60px;">
+			
+			<div>原有成员1</div>
+			<div>原有成员2</div>
+		</div>
+		目标元素B：
+		<div class="tagForInsertB" style="padding-left: 60px;">
+			<div>原有成员3</div>
+			<div>原有成员4</div>
+		</div>
+
+		<button class="tagForInsert1">append(to)</button>
+		<button class="tagForInsert2">perpend(to)</button>
+		<button class="tagForInsert3">(insert)after</button>
+		<button class="tagForInsert4">(insert)before</button>
+		<div class="inserter">待插入的元素</div>
+
+		<script type="text/javascript">
+			$('.tagForInsert1').on('click',function () {
+				//插在目标元素内的成员队尾 
+				//用目标元素调函数
+				$('.tagForInsertA').append($('.inserter'));
+				//用待插入的元素调函数，效果完全相同
+				//$('.inserter').appendTo($('.tagForInsert'));
+			});
+
+			$('.tagForInsert2').on('click',function () {
+				//插在目标元素内的成员队首 
+				//用目标元素调函数
+				//$('.tagForInsert').prepend($('.inserter'));
+				//用待插入的元素调函数，效果完全相同
+				$('.inserter').prependTo($('.tagForInsertA'));
+			});
+
+			$('.tagForInsert3').on('click',function () {
+				//插在目标元素后面，与其同级 
+				//用目标元素调函数
+				//$('.tagForInsertA').after($('.inserter'));
+				//用待插入的元素调函数，效果完全相同
+				$('.inserter').insertAfter($('.tagForInsertA'));
+			});
+
+				$('.tagForInsert4').on('click',function () {
+				//插在目标元素前面，与其同级 
+				//用目标元素调函数
+				$('.tagForInsertA').before($('.inserter'));
+				//用待插入的元素调函数，效果完全相同
+				//$('.inserter').insertBefore($('.tagForInsertA'));
+			});
+		</script>
+	</div><hr width="400px" color='red' align="left">
+
+	<div id="删除，清空元素">
+		# remove();empty(); detach();
+
+	</div>
+</p><hr/>
 	</body>
 </html>
 
